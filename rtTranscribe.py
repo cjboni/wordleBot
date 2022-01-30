@@ -6,13 +6,15 @@ import string
 from pynput.keyboard import Key, Controller
 import time
 from configure import auth_key
-
+import boto3
+import playsound
 import pyaudio
  
 keyboard = Controller()
 
 buffer = []
 
+polly_client = boto3.Session(aws_access_key_id='AKIAXMKPYUNFS4LGCSEM', aws_secret_access_key='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', region_name='us-east-1').client('polly')
 
 FRAMES_PER_BUFFER = 3200
 FORMAT = pyaudio.paInt16
@@ -84,6 +86,15 @@ async def send_receive():
                                                                         buffer.append(array[i]["text"].lower().translate(str.maketrans("", "", string.punctuation)))
                                                                 if buffer[-1] == "enter":
                                                                         keyboard.type(buffer[-2])
+                                                                        mytext = buffer[-2]
+                                                                        response = polly_client.synthesize_speech(VoiceId='Joanna',
+                                                                                                                  OutputFormat='mp3',
+                                                                                                                  Text = mytext,
+                                                                                                                  Engine = 'neural')
+                                                                        file = open('speech.mp3','wb')
+                                                                        file.write(response['AudioStream'].read())
+                                                                        file.close()
+                                                                        playsound.playsound('speech.mp3')
                                                                         buffer.clear()
                                                                 elif buffer[-1] == "stop":
                                                                         raise SystemExit
