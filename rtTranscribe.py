@@ -94,10 +94,9 @@ async def send_receive():
                                                 if json.loads(result_str)['message_type'] == "FinalTranscript":
                                                         array = (json.loads(result_str)['words'])
                                                         for i in range (len(array)):
-                                                                #print(array[i]["text"])
                                                                 if array[i]["text"] != "":
                                                                         buffer.append(array[i]["text"].lower().translate(str.maketrans("", "", string.punctuation)))
-                                                                if buffer[-1] == "enter":
+                                                                if buffer[-1] == "next":
                                                                         keyboard.type(buffer[-2])
                                                                         enteredWord = buffer[-2]
                                                                         mytext = buffer[-2]
@@ -111,6 +110,9 @@ async def send_receive():
                                                                         playsound.playsound('speech.mp3')
                                                                         os.remove('speech.mp3')
                                                                         buffer.clear()
+                                                                elif buffer[-1] == "go":
+                                                                        keyboard.press(Key.enter)
+                                                                        keyboard.release(Key.enter)
                                                                 elif buffer[-1] == "stop":
                                                                         raise SystemExit
                                                                 elif buffer[-1] == "delete":
