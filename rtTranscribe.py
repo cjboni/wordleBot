@@ -6,6 +6,8 @@ import string
 from pynput.keyboard import Key, Controller
 import time
 from configure import auth_key
+from configure import access_key
+from configure import secret_key
 import boto3
 import os
 import playsound
@@ -16,7 +18,7 @@ keyboard = Controller()
 buffer = []
 enteredWord = ""
 
-polly_client = boto3.Session(aws_access_key_id='AKIAXMKPYUNFS4LGCSEM', aws_secret_access_key='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', region_name='us-east-1').client('polly')
+polly_client = boto3.Session(aws_access_key_id=access_key, aws_secret_access_key=secret_key, region_name='us-east-1').client('polly')
 
 FRAMES_PER_BUFFER = 3200
 FORMAT = pyaudio.paInt16
